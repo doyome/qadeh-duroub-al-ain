@@ -1,0 +1,329 @@
+<title>تحويل سيارة إلى قادح</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Rakkas&family=Tajawal:wght@400;500;700;900&family=IBM+Plex+Mono:wght@400;600&display=swap">
+<style>
+:root{
+  --night:#0F1319; --panel:#141A22; --panel-2:#1A222C;
+  --sand:#E8C58A; --sand-dim:#A99B87; --gold:#F5B33C;
+  --ghaf:#5FBF95; --sign:#6BA7E8; --warn:#E8836A;
+  --ink:#F7EFE2; --line:rgba(232,197,138,.16); --line-2:rgba(232,197,138,.3);
+}
+*{box-sizing:border-box}
+body{
+  margin:0;background:var(--night);color:var(--ink);
+  font-family:"Tajawal",system-ui,"Segoe UI",sans-serif;
+  font-size:16.5px;line-height:1.75;
+  background-image:radial-gradient(120% 70% at 50% -10%,rgba(245,179,60,.07),transparent 60%);
+}
+.wrap{max-width:920px;margin:0 auto;padding:clamp(24px,5vw,56px) clamp(16px,4vw,32px) 80px;direction:rtl}
+.eyebrow{font-size:12.5px;letter-spacing:1.6px;color:var(--gold);font-weight:700;margin:0 0 10px}
+h1{font-family:"Rakkas",serif;font-weight:400;font-size:clamp(34px,7vw,54px);line-height:1.15;
+  margin:0 0 12px;color:var(--sand);text-wrap:balance}
+.lede{margin:0 0 26px;color:var(--sand-dim);font-size:17px;max-width:62ch}
+.lede b{color:var(--ink);font-weight:700}
+
+.steps{display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));margin:0 0 30px;padding:0;list-style:none;counter-reset:s}
+.steps li{counter-increment:s;background:var(--panel);border:1px solid var(--line);border-radius:14px;
+  padding:14px 16px 14px 14px;font-size:14.5px;color:var(--sand-dim);line-height:1.6;position:relative}
+.steps li::before{content:counter(s);position:absolute;top:12px;inset-inline-start:14px;
+  font-family:"IBM Plex Mono",monospace;font-size:11.5px;color:var(--gold);opacity:.75}
+.steps li b{display:block;color:var(--ink);font-weight:700;font-size:15px;margin-bottom:2px}
+
+.act{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin:0 0 34px;
+  padding:16px 18px;background:linear-gradient(180deg,rgba(245,179,60,.1),rgba(245,179,60,.03));
+  border:1px solid var(--line-2);border-radius:16px}
+.act p{margin:0;font-size:14px;color:var(--sand-dim);flex:1;min-width:200px}
+button.copy{font-family:"Tajawal",sans-serif;font-weight:700;font-size:16px;color:#231703;
+  background:linear-gradient(180deg,#F7C25A,#E39A22);border:none;border-radius:12px;
+  padding:12px 26px;cursor:pointer;box-shadow:0 4px 0 #9C6510;transition:transform .09s,box-shadow .09s}
+button.copy:active{transform:translateY(3px);box-shadow:0 1px 0 #9C6510}
+button.copy:focus-visible{outline:3px solid var(--sand);outline-offset:3px}
+button.copy.done{background:linear-gradient(180deg,#7FD9B0,#2E9C74);box-shadow:0 4px 0 #1D6349;color:#04271A}
+
+h2{font-family:"Rakkas",serif;font-weight:400;font-size:clamp(24px,4.6vw,32px);color:var(--gold);
+  margin:44px 0 6px;text-wrap:balance}
+h2 + .note{margin-top:0;color:var(--sand-dim);font-size:14.5px;margin-bottom:18px}
+
+figure{margin:0 0 8px;background:var(--panel);border:1px solid var(--line);border-radius:16px;
+  padding:18px 14px 10px;overflow-x:auto}
+figure svg{display:block;margin:0 auto;min-width:520px;max-width:100%;height:auto;direction:ltr}
+figcaption{margin-top:8px;font-size:13px;color:var(--sand-dim);text-align:center;line-height:1.7}
+.dim{font-family:"IBM Plex Mono",monospace;font-size:11px;fill:var(--sand-dim)}
+.lbl{font-family:"Tajawal",sans-serif;font-size:12.5px;fill:var(--sand);font-weight:500}
+.gold{fill:var(--gold)}
+
+pre.prompt{background:#0B0F14;border:1px solid var(--line);border-radius:16px;
+  padding:20px 18px;overflow-x:auto;max-height:70vh;overflow-y:auto;direction:rtl;text-align:right;
+  font-family:"IBM Plex Mono","Tajawal",monospace;font-size:13.2px;line-height:1.85;
+  color:#D8CDB8;white-space:pre-wrap;word-wrap:break-word;margin:0}
+pre.prompt::-webkit-scrollbar{width:9px;height:9px}
+pre.prompt::-webkit-scrollbar-thumb{background:rgba(232,197,138,.24);border-radius:8px}
+
+.foot{margin-top:40px;padding-top:20px;border-top:1px solid var(--line);
+  font-size:13.5px;color:var(--sand-dim);line-height:1.8}
+.foot code{font-family:"IBM Plex Mono",monospace;font-size:12.5px;color:var(--sand);
+  background:rgba(232,197,138,.09);padding:1px 6px;border-radius:5px}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+
+<div class="wrap">
+  <p class="eyebrow">قادح — دروب العين</p>
+  <h1>تحويل سيارة من SVG إلى مركبة داخل اللعبة</h1>
+  <p class="lede">برومبت جاهز تعطيه لـ Claude Code مع ملف الـ SVG في نفس الرسالة. كل رقم فيه
+  مستخرج من كود اللعبة الفعلي — <b>مو من وصف تقريبي</b> — عشان ما يبني افتراضات غلط قبل
+  ما يفتح الملف.</p>
+
+  <ol class="steps">
+    <li><b>سمّ الطبقات</b> في Figma بأسماء تنطبق على وسائط <code>suv</code>، وأضف خطي
+    <code>ground</code> و<code>center</code>.</li>
+    <li><b>صدّر SVG</b> منظر جانبي والمركبة متجهة يمين.</li>
+    <li><b>الصق البرومبت + الملف</b> في رسالة وحدة لـ Claude Code.</li>
+  </ol>
+
+  <div class="act">
+    <p>ينسخ نص البرومبت كامل كما هو، جاهز للّصق.</p>
+    <button class="copy" id="cp">انسخ البرومبت</button>
+  </div>
+
+  <h2>نظام الإحداثيات داخل <span style="font-family:'IBM Plex Mono',monospace;font-size:.7em">draw(c,&nbsp;v)</span></h2>
+  <p class="note">هذي أصعب نقطة توصفها بالكلام، وهي اللي لو غلط فيها بتطفو السيارة أو يكشط بطنها.</p>
+  <figure>
+    <svg viewBox="-150 -95 300 175" role="img" aria-label="مخطط نظام إحداثيات المركبة">
+      <!-- الأرض -->
+      <line x1="-140" y1="45" x2="140" y2="45" stroke="#E8C58A" stroke-width="1.4" opacity=".85"/>
+      <!-- خطوط مرجعية -->
+      <g stroke="#E8C58A" stroke-width=".7" stroke-dasharray="4 4" opacity=".38">
+        <line x1="-140" y1="10" x2="140" y2="10"/>
+        <line x1="-140" y1="-26" x2="140" y2="-26"/>
+        <line x1="-140" y1="-62" x2="140" y2="-62"/>
+      </g>
+      <!-- جسم المركبة -->
+      <path d="M-95,10 L-95,-26 L-93,-56 L-74,-62 L24,-62 L36,-28 L86,-26 L95,-18 L95,10
+               L93,10 A35,35 0 0 0 23,10 L-23,10 A35,35 0 0 0 -93,10 Z"
+            fill="#2E4470" stroke="#6BA7E8" stroke-width="1" opacity=".92"/>
+      <!-- زجاج -->
+      <path d="M-70,-30 L-70,-56 L20,-56 L32,-30 Z" fill="#6BA7E8" opacity=".5"/>
+      <!-- عجلات -->
+      <g fill="none" stroke="#F5B33C" stroke-width="1.5">
+        <circle cx="58" cy="16" r="29"/><circle cx="-58" cy="16" r="29"/>
+      </g>
+      <g fill="#F5B33C"><circle cx="58" cy="16" r="2"/><circle cx="-58" cy="16" r="2"/></g>
+      <!-- قوس الحفرة -->
+      <path d="M93,10 A35,35 0 0 0 23,10" fill="none" stroke="#E8836A" stroke-width="1.6" stroke-dasharray="3 3"/>
+      <!-- نقطة الأصل -->
+      <g stroke="#F7EFE2" stroke-width="1.2"><line x1="-7" y1="0" x2="7" y2="0"/><line x1="0" y1="-7" x2="0" y2="7"/></g>
+      <text class="lbl" x="4" y="-10">‏(0,0) مركز الثقل</text>
+      <!-- محور x -->
+      <g stroke="#F7EFE2" stroke-width="1" opacity=".7">
+        <line x1="0" y1="66" x2="52" y2="66"/><path d="M52,66 l-6,-3 v6 z" fill="#F7EFE2" stroke="none"/>
+      </g>
+      <text class="lbl" x="56" y="70">‏+x للأمام</text>
+      <!-- تسميات -->
+      <text class="dim" x="-138" y="-65">y = -62</text><text class="lbl" x="-100" y="-65">السقف</text>
+      <text class="dim" x="-138" y="-29">y = -26</text><text class="lbl" x="-100" y="-29">خط الحزام</text>
+      <text class="dim" x="-138" y="7">y = +10</text><text class="lbl" x="-100" y="7">أسفل الهيكل</text>
+      <text class="dim gold" x="-138" y="42">y = +45</text><text class="lbl gold" x="-100" y="42">الأرض</text>
+      <text class="dim" x="98" y="14">L = 95</text>
+      <text class="dim" style="fill:#E8836A" x="26" y="30">arch 35</text>
+      <text class="dim" x="46" y="-40">wf 58</text>
+      <text class="dim" x="-78" y="-40">wr -58</text>
+    </svg>
+    <figcaption>مقاسات الفتك Y61 الفعلية. الأرض عند <span style="color:var(--gold)">y=+45</span> = ly(−6) + rest(22) + r(29).
+    القوس الأحمر هو حفرة قاعدة العجلة داخل نفس مسار الهيكل — بدونها تختفي الإطارات.</figcaption>
+  </figure>
+
+  <h2>البرومبت</h2>
+  <p class="note">المصدر الرسمي: <code style="font-family:'IBM Plex Mono',monospace">docs/svg-to-vehicle.md</code> داخل المستودع.</p>
+  <pre class="prompt" id="txt">## المهمة
+
+عندك ملف SVG لسيارة (منظر جانبي). حوّله إلى مركبة قابلة للعب داخل لعبة `قادح — دروب العين`
+الموجودة في هذا المستودع، بنفس أسلوب المركبات الحالية بالضبط.
+
+**قبل ما تفتح ملف الـ SVG:** اقرأ `index.html` وادرس فعليًا الدالة `suv(c,p)` وتعريفات
+`fatak` و`rubaa` و`y60` و`lc` في مصفوفة `VEH`. الوصف تحت مطابق للكود، بس تأكد بنفسك.
+
+---
+
+## ١) كيف تُرسم المركبات هنا (الحقائق)
+
+المحرّك **Canvas 2D فقط** — لا Three.js ولا WebGL ولا أي مكتبة رسم. ما فيه صور ولا
+sprites: كل مركبة **رسم متجهي إجرائي** مكتوب بأوامر مسارات.
+
+### نظام الإحداثيات داخل `draw(c, v)`
+
+الدالة تُستدعى وهي أصلاً داخل `save/translate/rotate/restore` في `drawCar`، فلا تنقل ولا
+تدوّر جسم المركبة بنفسك:
+
+```
+المحور:      +x = للأمام (يمين الشاشة)   |   +y = لتحت
+نقطة الأصل:  مركز ثقل الهيكل
+y = +45   ← خط ملامسة الأرض وقت الوقوف المستوي  (ly=-6 + rest=22 + r=29)
+y = +10   ← أسفل الهيكل (sill) → خلوص أرضي ≈ ٣٥ بكسل
+y = -22..-30 ← خط الحزام (أسفل الزجاج)
+y = -52..-62 ← السقف
+±L       ← نصف طول المركبة: 72 (ربع) … 110 (طويل)
+```
+
+### المقياس — لا «تصحّحه»
+
+`PPM = 34` بكسل لكل متر. لكن الرسم **مبالغ فيه عمدًا بأسلوب أركيد**: الطول أكبر من الواقعي
+بـ١٢٪ تقريبًا، والارتفاع والعجلات أكبر بكثير. لا ترجّع النسب إلى الواقعية —
+بتطلع المركبة غريبة جنب البقية، وبتكسر الفيزياء لأن نصف قطر العجلة `r` معامل فيزيائي.
+
+### قاعدة المسار الواحد (الأهم)
+
+جسم المركبة **مسار واحد مغلق** يُملأ بتدرّج رأسي واحد، وقواعد العجلات **محفورة داخل نفس
+المسار**:
+
+```js
+c.beginPath(); c.moveTo(-L, sill);
+for (كل نقطة في sil) c.lineTo(x, y);      // الظلّية العلوية: من المؤخرة إلى الأنف
+c.lineTo(L, sill);
+c.lineTo(wf+arch, sill); c.arc(wf, sill, arch, 0, Math.PI, true);   // قاعدة أمامية
+c.lineTo(wr+arch, sill); c.arc(wr, sill, arch, 0, Math.PI, true);   // قاعدة خلفية
+c.closePath();
+```
+
+`drawCar` يرسم **العجلات أولاً ثم الهيكل فوقها**. الحفرتان هما اللي تخلّي الإطار يبان.
+لو ملأت الهيكل كمستطيل صلب بدون حفر → تختفي الإطارات تمامًا.
+
+---
+
+## ٢) الصيغة المطلوبة للمخرَج
+
+**لا تكتب دالة رسم جديدة من الصفر إن كانت المركبة دفع رباعي.** عبّر عنها كوسائط لـ `suv(c,p)`:
+
+| الوسيط | المعنى |
+|---|---|
+| `L` | نصف الطول |
+| `wf`, `wr` | مركز العجلة الأمامية/الخلفية على x |
+| `arch` | نصف قطر حفرة قاعدة العجلة (٣٣–٣٥) |
+| `sill` | أسفل الهيكل (١٠) |
+| `roofY` | خط السقف |
+| `sil[]` | نقاط الظلّية العلوية `[x,y]` من المؤخرة إلى الأنف |
+| `gh[4]` | مضلّع الزجاج: `[خلفي‑أسفل, خلفي‑أعلى, أمامي‑أعلى, أمامي‑أسفل]` |
+| `pillars[]` | مواضع x للأعمدة بين النوافذ |
+| `doors[]` | مواضع x لخطوط الأبواب (المقبض يُرسم تلقائيًا خلف كل خط بـ١٤ بكسل) |
+| `c1`, `c2` | لون الطلاء أعلى/أسفل (hex صريح) |
+| `lights` | `&#x27;square&#x27;` أو `&#x27;round&#x27;` أو `&#x27;chrome&#x27;` |
+| `chrome`, `dark`, `flare` | ألوان الكروم والصدامات والرفارف (اختيارية) |
+| `rack`+`rackB`+`rackF`, `bar`, `snorkel`, `spare` | رف السقف، بار الكشافات، السنوركل، الإطار الاحتياطي |
+| `driver` | موضع x لراس السائق (تُرسم بـ`head()`) |
+
+مثال حقيقي من الكود (الفتك) — هذا هو حجم المخرَج المتوقع:
+
+```js
+draw:function(c){suv(c,{L:95,wf:58,wr:-58,arch:35,sill:10,roofY:-62,
+  sil:[[-95,-26],[-93,-56],[-74,-62],[24,-62],[36,-28],[86,-26],[95,-18]],
+  gh:[[-70,-30],[-70,-56],[20,-56],[32,-30]],pillars:[-34,2],doors:[-38,6,50],
+  c1:&#x27;#2E4470&#x27;,c2:&#x27;#1A2740&#x27;,lights:&#x27;square&#x27;,snorkel:36,rack:1,rackB:-68,rackF:18,bar:1,
+  flare:&#x27;#171B21&#x27;,driver:-6});}
+```
+
+**ميزانية الحجم:** دالة رسم المركبة ≈ ١٠–٢٥ سطر. لو طلع عندك ٢٠٠ سطر من بيانات مسارات
+مستوردة من الـ SVG فأنت غلطان — بسّط إلى ظلّية + طبقات تفاصيل.
+
+---
+
+## ٣) الفيزياء ليست اختيارية
+
+هذي الحقول **معاملات فيزياء وليست رسم**، ولازم تطابق الرسم:
+
+```js
+mass, power, maxSpeed, grip, air, fuel,     // الإحساس والأداء
+wf, wr, r, rest, sMin, sMax, kM, cM,        // هندسة العجلات والتعليق
+pts: suvPts(L, roofY, ghF, ghB),            // نقاط التصادم
+thumb                                        // تكبير مصغّرة الكراج
+```
+
+- `pts` = نقطتا مصدّ عند `y:12` + ثلاث نقاط سقف عليها `k:1`.
+  ملامسة نقطة `k` تنهي الجولة **فقط** إذا كانت زاوية المركبة &gt; ١.٠٥ راديان (انقلاب حقيقي)؛
+  غير كذا تُحسب خبطة سقف تكلّف السرعة والمضاعف.
+- لو عجلات الرسم ما وقعت على `wf/wr/r` → المركبة تطفو فوق الأرض أو يكشط بطنها ويكتم سرعتها.
+- خلّي `mass/power/maxSpeed/price` منسجمة مع تدرّج المركبات الموجود (السكوتر ← الدبابة).
+
+---
+
+## ٤) ممنوعات صارمة
+
+1. **التحويل خطوة لمرة وحدة خارج اللعبة.** ملف الـ SVG لا يُشحن، ولا يُقرأ وقت التشغيل،
+   ولا يُضمَّن كـ data-URI، ولا يُحلَّل بأي كود داخل اللعبة. المخرَج كود مسارات فقط.
+2. **صفر مكتبات وصفر طلبات شبكة جديدة.** اللعبة ملف `index.html` واحد مستقل؛ الطلبات
+   الخارجية الوحيدة المسموحة هي رابطا خطوط Google الموجودان أصلاً. لا تضيف خطوة بناء
+   ولا `package.json` للعبة نفسها.
+3. **لا `&lt;img&gt;` ولا `Image()` ولا `drawImage` ولا sprite sheets.** ولا WebGL.
+4. `Path2D` أصلية في المتصفح ومسموحة **فقط** لزخرفة صغيرة (نقشة شبك، شعار) —
+   وممنوعة لظلّية الهيكل، لأن الهيكل لازم يبقى المسار الواحد المُعامَل بوسائط.
+5. كل `c.save()` يقابله `c.restore()`. لا تستخدم المتغيّر العام `ctx` — استخدم `c` الممرَّر.
+6. ألوان hex صريحة داخل الكانفس، بدون متغيّرات CSS.
+7. لا تلمس `physics()` ولا مولّد التضاريس عشان تخلّي سيارتك تشتغل.
+
+---
+
+## ٥) التحقق مطلوب قبل ما تقول «خلصت»
+
+المستودع فيه أدوات فحص headless تشغّل اللعبة في Node بدون متصفح. شغّلها كلها:
+
+```bash
+node tools/physics.js   # ١١٥ فحص: بدون NaN، تتحرك، تستقر مستوية، التطويرات تؤثر
+node tools/render.js    # كل مسارات الرسم تنفّذ بدون استثناء (٦ مراحل × كل المركبات + المصغّرات)
+node tools/air.js       # المركبة تطير فعلاً: زمن هواء وارتفاع وعدد قفزات
+node tools/pilot.js     # طيّار آلي يقيس المسافة عبر المراحل الست
+```
+
+الشروط: `ALL CHECKS PASSED` و`ALL RENDER PATHS OK` و`ALL AIR CHECKS PASSED`،
+و`tools/pilot.js` يعطي مسافة للمركبة الجديدة قريبة من مركبة مماثلة في السعر.
+لو `pilot.js` طلّع لها مسافة أقل بكثير → في خلل في الخلوص الأرضي أو نقاط التصادم.
+
+**نبّهني بصراحة إذا الشكل ما ينفع يتحوّل بأسلوب اللعبة** بدل ما تجبره.
+
+---
+
+## ٦) قبل التصدير من Figma (للمصمّم)
+
+- **منظر جانبي فقط، والمركبة متجهة يمين.** لو الرسم متجه يسار اعكسه قبل التصدير.
+- **سمّ الطبقات بأسماء تنطبق على وسائط `suv`** — لا أسماء عامة:
+  `body` · `glass` · `pillar-b` · `pillar-c` · `door-1..3` · `arch-front` · `arch-rear`
+  · `grille` · `headlight` · `taillight` · `rack` · `lightbar` · `snorkel` · `spare` · `mirror`
+- **ادمج جسم السيارة في مسار واحد** (`body`)، وخلّي التفاصيل طبقات منفصلة. لو صدّرت
+  كل شي مسار واحد مدموج، ما راح يقدر يفصل الهيكل عن الشبك والنوافذ.
+- **أضف خطين إرشاديين مسمّيين:** خط أفقي اسمه `ground` عند ملامسة الإطارات للأرض،
+  وخط رأسي اسمه `center` عند مركز المركبة. بدونهما ما فيه طريقة دقيقة لمطابقة
+  نظام الإحداثيات (`ground` → `y=+45`، `center` → `x=0`).
+- **ارسم دائرتين على مركزي العجلتين** مسمّيتين `wheel-front` و`wheel-rear` بنصف القطر
+  الحقيقي — منها تُشتق `wf` و`wr` و`r` و`arch`.
+- اكتب في الرسالة **نصف الطول `L` المقصود** بالبكسل (٧٢–١١٠) واسم المركبة وسعرها المقترح.</pre>
+
+  <p class="foot">
+    بعد أي إضافة مركبة، شغّل أدوات الفحص من جذر المستودع:
+    <code>node tools/physics.js</code> · <code>node tools/render.js</code> ·
+    <code>node tools/air.js</code> · <code>node tools/pilot.js</code><br>
+    كلها تشغّل اللعبة في Node بدون متصفح، وهي اللي كشفت كل الأخطاء الحقيقية في المشروع.
+  </p>
+</div>
+
+<script>
+(function(){
+  var btn=document.getElementById('cp'), pre=document.getElementById('txt');
+  btn.addEventListener('click',function(){
+    var t=pre.textContent;
+    function ok(){btn.textContent='تم النسخ ✓';btn.classList.add('done');
+      setTimeout(function(){btn.textContent='انسخ البرومبت';btn.classList.remove('done');},2200);}
+    try{
+      if(navigator.clipboard&&navigator.clipboard.writeText){
+        navigator.clipboard.writeText(t).then(ok,sel);return;
+      }
+    }catch(e){}
+    sel();
+    function sel(){
+      try{
+        var r=document.createRange();r.selectNodeContents(pre);
+        var s=window.getSelection();s.removeAllRanges();s.addRange(r);
+        btn.textContent='محدّد — اضغط Ctrl+C';
+        setTimeout(function(){btn.textContent='انسخ البرومبت';},3000);
+      }catch(e){btn.textContent='انسخه يدويًا من الصندوق';}
+    }
+  });
+})();
+</script>
